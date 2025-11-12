@@ -39,15 +39,15 @@ To draw lines between projected points on the terminal grid:
 
 1. Compute differences:
 
-![Formula2](screenshots/sc2.png)
+![Formula2](screenshots/sc2.PNG)
 
 2. Determine step directions:
 
-![Formula3](screenshots/sc3.png)
+![Formula3](screenshots/sc3.PNG)
 
 3. Initialize the error term:
 
-![Formula4](screenshots/sc4.png)
+![Formula4](screenshots/sc4.PNG)
 
 4. Plot points iteratively and update (err) until the endpoint is reached.
 
