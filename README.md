@@ -19,7 +19,7 @@ A terminal-based 3D renderer built with Python and `curses` that helped me learn
 
 The renderer converts 3D coordinates ((x, y, z)) into 2D screen coordinates ((x', y')) using **perspective projection**:
 
-![Formula1](screenshots/sc1.png)
+![Formula1](screenshots/sc1.PNG)
 
 Where:
 
