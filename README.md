@@ -19,9 +19,7 @@ A terminal-based 3D renderer built with Python and `curses` that helped me learn
 
 The renderer converts 3D coordinates ((x, y, z)) into 2D screen coordinates ((x', y')) using **perspective projection**:
 
-[
-x' = \frac{d \cdot x}{z + d}, \quad y' = \frac{d \cdot y}{z + d}
-]
+screenshots/sc1.png
 
 Where:
 
@@ -41,30 +39,15 @@ To draw lines between projected points on the terminal grid:
 
 1. Compute differences:
 
-[
-\Delta x = |x_1 - x_0|, \quad \Delta y = |y_1 - y_0|
-]
+screenshots/sc2.png
 
 2. Determine step directions:
 
-[
-s_x =
-\begin{cases}
-1 & \text{if } x_0 < x_1 \
--1 & \text{otherwise}
-\end{cases}, \quad
-s_y =
-\begin{cases}
-1 & \text{if } y_0 < y_1 \
--1 & \text{otherwise}
-\end{cases}
-]
+screenshots/sc3.png
 
 3. Initialize the error term:
 
-[
-err = \Delta x - \Delta y
-]
+screenshots/sc4.png
 
 4. Plot points iteratively and update (err) until the endpoint is reached.
 
