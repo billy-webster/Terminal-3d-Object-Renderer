@@ -35,7 +35,6 @@ def main(stdscr):
     curses.mousemask(curses.ALL_MOUSE_EVENTS)
     stdscr.timeout(10)
 
-    # ✅ show menu FIRST
     selected_shape = show_menu(stdscr)
     shapes = [selected_shape]
 
@@ -51,3 +50,4 @@ def main(stdscr):
 
 if __name__ == "__main__":
     curses.wrapper(main)
+
