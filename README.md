@@ -1,5 +1,7 @@
 # 3D Renderer in Terminal
 ![cuberender](screenshots/cube.PNG)
+
+
 A terminal-based 3D renderer built with Python and `curses` that helped me learn fundamental computer graphics concepts using mathematical transformations and projections.
 
 ## Features
