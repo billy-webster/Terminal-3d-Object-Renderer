@@ -3,8 +3,6 @@ import curses
 import time
 from src.math.arcball import Arcball
 
-
-
 class Renderer:
     def __init__(self, stdscr, shapes):
         self.stdscr = stdscr
@@ -14,15 +12,25 @@ class Renderer:
         self.last_v = None
         self.scale = 10  
 
-    def draw_line(self, grid, x0, y0, x1, y1):
+
+    def depth_to_char(self, z, min_z, max_z):
+        shades = " .:-=+*#%@"
+        t = (z - min_z) / (max_z - min_z + 1e-6)
+        index = int(t * (len(shades) - 1))
+        return shades[index]
+
+ 
+    def draw_line(self, grid, x0, y0, z0, x1, y1, z1, min_z, max_z):
         dx = abs(x1 - x0)
         dy = abs(y1 - y0)
         sx = 1 if x0 < x1 else -1
         sy = 1 if y0 < y1 else -1
         err = dx - dy
+
         while True:
             if 0 <= x0 < len(grid[0]) and 0 <= y0 < len(grid):
-                grid[y0][x0] = "."
+                z = (z0 + z1) / 2
+                grid[y0][x0] = self.depth_to_char(z, min_z, max_z)
             if x0 == x1 and y0 == y1:
                 break
             e2 = 2 * err
@@ -33,6 +41,7 @@ class Renderer:
                 err += dx
                 y0 += sy
 
+ 
     def render(self):
         rows, cols = self.stdscr.getmaxyx()
         grid = [[" " for _ in range(cols)] for _ in range(rows)]
@@ -42,12 +51,18 @@ class Renderer:
             scale = self.scale
             xc = (projected[0] * scale).astype(int)
             yc = (projected[1] * scale).astype(int)
+
+           
+            zc = np.array([p[2][0] for p in shape.points])
+            min_z, max_z = zc.min(), zc.max()
+
             off_x = cols // 2
             off_y = rows // 2 - rows // 4
+
             for a, b in shape.edges:
-                x0, y0 = xc[a] + off_x, yc[a] + off_y
-                x1, y1 = xc[b] + off_x, yc[b] + off_y
-                self.draw_line(grid, x0, y0, x1, y1)
+                x0, y0, z0 = xc[a] + off_x, yc[a] + off_y, zc[a]
+                x1, y1, z1 = xc[b] + off_x, yc[b] + off_y, zc[b]
+                self.draw_line(grid, x0, y0, z0, x1, y1, z1, min_z, max_z)
 
         self.stdscr.clear()
         for y in range(min(rows, len(grid))):
@@ -57,6 +72,7 @@ class Renderer:
                 pass
         self.stdscr.refresh()
 
+ 
     def handle_mouse(self, evt):
         rows, cols = self.stdscr.getmaxyx()
         if evt == curses.KEY_MOUSE:
@@ -77,7 +93,7 @@ class Renderer:
                         for shape in self.shapes:
                             shape.rotate(R)
                 self.last_v = v
-            # Zooming
+      
             if state & curses.BUTTON4_PRESSED: 
                 self.scale += 1
             if state & curses.BUTTON5_PRESSED:  
